@@ -1,0 +1,38 @@
+# Deploys app/ to GitHub Pages on every push to main. Separate from prove.yml, which stays as shipped.
+# It stamps the commit sha into the page (R6) and writes config.js from the SESSION secret, so the
+# session key is never in a tracked file.
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the site
+        env:
+          SESSION: ${{ secrets.SESSION }}
+          API: https://hq.mega.dev/challenges/show-me-when/api
+        run: |
+          test -n "$SESSION" || { echo "SESSION secret is missing"; exit 1; }
+          cp -r app _site
+          sed -i "s/__BUILD_SHA__/${GITHUB_SHA}/g" _site/index.html
+          printf "export const API = '%s';\nexport const SESSION = '%s';\n" "$API" "$SESSION" > _site/config.js
+          grep -q "$GITHUB_SHA" _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

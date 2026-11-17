@@ -18,3 +18,17 @@ footer { color: #777; font-size: 13px; }
 .row .acked { color: #1a7f37; font-weight: 600; }
 .row .ack-error { color: #b00020; font-size: 13px; }
 footer code { font-family: ui-monospace, monospace; }
+.row { cursor: pointer; }
+.row:hover, .row:focus { background: #f3f6fb; outline: none; }
+.row.selected { background: #e8f0fe; box-shadow: inset 3px 0 0 #1a73e8; }
+.panel { position: fixed; top: 90px; left: 1000px; width: 240px; padding: 16px; background: #fff; border: 1px solid #d0d7de; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.panel p { margin: 6px 0; }
+.panel .p-id { font: 600 20px/1.2 ui-monospace, monospace; margin-right: 24px; }
+.panel .p-summary { font-weight: 600; }
+.panel time { color: #555; font-variant-numeric: tabular-nums; }
+.panel .p-close { position: absolute; top: 8px; right: 8px; border: 0; background: none; font-size: 20px; cursor: pointer; }
+.panel .p-ack { font: inherit; margin-top: 8px; padding: 6px 18px; border: 1px solid #1a73e8; border-radius: 4px; background: #1a73e8; color: #fff; cursor: pointer; }
+.panel .p-ack:disabled { opacity: .6; cursor: progress; }
+.panel .p-acked { color: #1a7f37; font-weight: 600; }
+.panel .p-error { color: #b00020; font-size: 13px; }
+@media (max-width: 1259px) { .panel { left: auto; right: 16px; top: auto; bottom: 16px; width: min(320px, calc(100vw - 64px)); } }
